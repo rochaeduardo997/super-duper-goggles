@@ -1,2 +1,3 @@
 server/node_modules
 database/
+docker-compose.yml

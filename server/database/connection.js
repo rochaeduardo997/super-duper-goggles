@@ -1,10 +1,10 @@
 const knex = require("knex")({
   client: "mysql2",
   connection: {
-    host: "HOST",
-    user: "USER",
-    password: "PASSWORD",
-    database: "DATABASE"
+    host: "192.168.208.2",
+    user: "user",
+    password: "user@pw",
+    database: "db_blog"
   }
 });
 
@@ -19,6 +19,7 @@ MariaDB [db_blog]> CREATE TABLE tbl_users(
     -> username VARCHAR(30) NOT NULL UNIQUE,
     -> email VARCHAR(100) NOT NULL UNIQUE,
     -> password VARCHAR(20) NOT NULL,
+    -> role INT NOT NULL DEFAULT 0,
     -> createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     -> updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     -> );

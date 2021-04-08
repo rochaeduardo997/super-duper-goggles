@@ -37,6 +37,16 @@ class User{
     }).from("tbl_users");
   }
 
+  async deleteById(id){
+    try{
+      const result = knex.delete().where({ id: id }).table("tbl_users");
+
+      return result;
+    }catch(error){
+      return console.error(error);
+    }
+  }
+
   async checkUsername(username){
     try{
       const result = await knex.select().from("tbl_users").where({ username: username });

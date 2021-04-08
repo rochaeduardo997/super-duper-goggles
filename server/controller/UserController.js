@@ -16,28 +16,35 @@ class UserController {
   }
 
   async findById(req, res) {
-    const { id } = req.params;
+    try{
+      const { id } = req.params;
 
-    // console.log(id);
+      // console.log(id);
 
-    if(id == undefined){
-      return res.status(400).json({
-        error: "Invalid id"
-      })
-    }
+      if(id == undefined || isNaN(id)){
+        return res.status(400).json({
+          error: "Invalid id"
+        })
+      }
 
-    const userById = await User.findById(id);
+      const userById = await User.findById(id);
 
-    if(JSON.stringify(userById) == undefined){
-      return res.status(404).json({
-        error: "Id not found"
+      if(JSON.stringify(userById) == undefined){
+        return res.status(404).json({
+          error: "User cannot be found"
+        });
+      }
+
+      console.log(userById);
+      return res.json({
+        userById
+      });
+    }catch(error){
+      console.error(error);
+      return res.status(500).json({
+        error: "Something is wrong",
       });
     }
-
-    console.log(userById);
-    return res.json({
-      userById
-    })
   }
 
   async createNew(req, res) {
@@ -91,6 +98,33 @@ class UserController {
       return res.status(500).json({
         error: "Something is wrong",
       })
+    }
+  }
+
+  async deleteById(req, res) {
+    try{
+      const { id } = req.params;
+      const userById = await User.findById(id);
+
+      if(id == undefined || isNaN(id)){
+        return res.status(400).json({
+          error: "Invalid id"
+        });
+      }
+
+      if(JSON.stringify(userById) == undefined){
+        return res.status(404).json({
+          error: "User cannot be found",
+        });
+      }
+
+      User.deleteById(id);
+
+      return res.status(200).json({
+        success: "Users has been deleted"
+      });
+    }catch(error){
+      return console.error(error);
     }
   }
 }

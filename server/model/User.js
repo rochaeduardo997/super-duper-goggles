@@ -4,8 +4,24 @@ const knex = require("../database/connection");
 
 class User{
   async findUsers(){
-    const users = await knex.select().from("tbl_users");
-    return users;
+    try{
+      const result = await knex.select(["id", "firstName", "lastName", "username", "email"]).from("tbl_users");
+      return result;
+    }catch(error){
+      return console.error(error);
+    }
+  }
+
+  async findById(id){
+    try{
+      const result = await knex.select(["id", "firstName", "lastName", "username", "email"]).from("tbl_users").where({ id: id });
+
+      if(result.length > 0){
+        return result;
+      }
+    }catch(error){
+      return console.log(error);
+    }
   }
 
   async insertUser(firstName, lastName, username, email, password){

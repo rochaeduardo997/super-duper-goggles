@@ -11,6 +11,7 @@ router.get("/", HomeController.index);
 
 //users
 router.get("/users", UserController.index);
+router.get("/user/:id", UserController.findById);
 router.post("/users", UserController.createNew);
 
 module.exports = router;

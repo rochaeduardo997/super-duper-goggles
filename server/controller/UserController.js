@@ -15,6 +15,31 @@ class UserController {
     }
   }
 
+  async findById(req, res) {
+    const { id } = req.params;
+
+    // console.log(id);
+
+    if(id == undefined){
+      return res.status(400).json({
+        error: "Invalid id"
+      })
+    }
+
+    const userById = await User.findById(id);
+
+    if(JSON.stringify(userById) == undefined){
+      return res.status(404).json({
+        error: "Id not found"
+      });
+    }
+
+    console.log(userById);
+    return res.json({
+      userById
+    })
+  }
+
   async createNew(req, res) {
     try{
       const { firstName, lastName, username, email, password } = req.body;

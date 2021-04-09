@@ -4,11 +4,15 @@ class UserController {
   async index(req, res) {
     try{
       const users = await User.findUsers();
-      console.log(users);
+      console.log({
+        "success": "Users has be found"
+      });
 
       return res.status(200).json(users);
     }catch(error){
-      console.error(error);
+      console.error({
+        "error": error
+      });
       return res.status(500).json({
         error: "Something is wrong",
       });
@@ -31,16 +35,20 @@ class UserController {
 
       if(JSON.stringify(userById) == undefined){
         return res.status(404).json({
-          error: "User cannot be found"
+          error: "User cannot be found by id"
         });
       }
 
-      console.log(userById);
+      console.log({
+        "success": "User has be found by id"
+      });
       return res.json({
         userById
       });
     }catch(error){
-      console.error(error);
+      console.log({
+        "error": error
+      });
       return res.status(500).json({
         error: "Something is wrong",
       });
@@ -53,34 +61,45 @@ class UserController {
 
       const checkUsername = await User.checkUsername(username);
       const checkEmail = await User.checkEmail(email);
-      console.log(checkUsername);
-      console.log(checkEmail);
+      // console.log(checkUsername);
+      // console.log(checkEmail);
 
       if(firstName == undefined){
         return res.status(400).json({
           error: "Invalid input for firstName"
         });
       }
+
+      if(!isNaN(lastName)){
+        return res.status(400).json({
+          error: "Last name cannot be a number"
+        });
+      }
+
       if(username == undefined ){
         return res.status(400).json({
           error: "Invalid input for username"
         });
       }
+
       if(checkUsername){
         return res.status(400).json({
           error: "Username already been used"
         });
       }
+
       if(email == undefined){
         return res.status(400).json({
           error: "Invalid input for email"
         });
       }
+
       if(checkEmail){
         return res.status(400).json({
           error: "Email already been used"
         });
       }
+
       if(password == undefined){
         return res.status(400).json({
           error: "Invalid input for password"
@@ -92,12 +111,16 @@ class UserController {
       res.status(200).json({
         success: "User has been registered"
       });
-      return console.log("success: User has been registered");
+      return console.log({
+        "success": "User has been registered"
+      });
     }catch(error){
-      console.log(error);
+      console.log({
+        "error": error
+      });
       return res.status(500).json({
         error: "Something is wrong",
-      })
+      });
     }
   }
 
@@ -120,11 +143,81 @@ class UserController {
 
       User.deleteById(id);
 
+      console.log({
+        "success": "User has been deleted"
+      });
       return res.status(200).json({
-        success: "Users has been deleted"
+        success: "User has been deleted"
       });
     }catch(error){
-      return console.error(error);
+      console.log({
+        "error": error
+      });
+      return res.status(500).json({
+        error: "Something is wrong",
+      });
+    }
+  }
+
+  async updateUser(req, res) {
+    try{
+      const { id } = req.params;
+      const { firstName, lastName, username, email } = req.body;
+
+      const checkUsername = await User.checkUsername(username);
+      const checkEmail = await User.checkEmail(email);
+
+      if(firstName == undefined && firstName == " " && isNaN(firstName)){
+        return res.status(400).json({
+          error: "First name cannot be empty or a number"
+        });
+      }
+
+      if(!isNaN(lastName)){
+        return res.status(400).json({
+          error: "Last name cannot be a number"
+        });
+      }
+
+      if(username == undefined ){
+        return res.status(400).json({
+          error: "Invalid input for username"
+        });
+      }
+
+      if(checkUsername){
+        return res.status(400).json({
+          error: "Username already been used"
+        });
+      }
+
+      if(email == undefined){
+        return res.status(400).json({
+          error: "Invalid input for email"
+        });
+      }
+
+      if(checkEmail){
+        return res.status(400).json({
+          error: "Email already been used"
+        });
+      }
+
+      await User.updateUser(id, firstName, lastName, username, email);
+
+      console.log({
+        "success": "User has been updated"
+      })
+      return res.status(200).json({
+        success: "User has been updated"
+      })
+    }catch(error){
+      console.log({
+        "error": error
+      });
+      return res.status(500).json({
+        error: "Something is wrong",
+      });
     }
   }
 }

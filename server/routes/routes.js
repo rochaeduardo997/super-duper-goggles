@@ -12,7 +12,8 @@ router.get("/", HomeController.index);
 //users
 router.get("/users", UserController.index);
 router.get("/user/:id", UserController.findById);
-router.post("/users", UserController.createNew);
+router.post("/user", UserController.createNew);
 router.delete("/user/:id", UserController.deleteById);
+router.put("/user/:id", UserController.updateUser);
 
 module.exports = router;

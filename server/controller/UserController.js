@@ -1,3 +1,7 @@
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const secret = "thisisasecretok";
+
 const User = require("../model/User");
 
 class UserController {
@@ -218,6 +222,30 @@ class UserController {
       return res.status(500).json({
         error: "Something is wrong",
       });
+    }
+  }
+
+  async loginUser(req, res) {
+    const { email, password } = req.body;
+
+    const userFoundByEmail = await User.findByEmail(email);
+    // console.log(userFoundByEmail.password);
+
+    if(userFoundByEmail != false){
+      const passwordMatch = await bcrypt.compare(password, userFoundByEmail.password);
+      // console.log(passwordMatch);
+
+      if(passwordMatch){
+        const token = jwt.sign({ email: userFoundByEmail.email, role: userFoundByEmail.role }, secret);
+        return res.status(200).json({
+          success: passwordMatch,
+          token: token
+        });
+      }else{
+        return res.status(401).json({
+          error: "Password don\'t match"
+        });
+      }
     }
   }
 }

@@ -22,5 +22,6 @@ router.post("/login", UserController.loginUser);
 //posts
 router.get("/posts", PostController.index);
 router.get("/post/:id", PostController.findById);
+router.post("/post", PostController.createNew);
 
 module.exports = router;

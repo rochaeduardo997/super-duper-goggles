@@ -10,7 +10,7 @@ class Post {
 
       return result;
     }catch(error){
-      return console.log({ error: error });
+      return console.log({ error });
     }
   }
 
@@ -24,7 +24,18 @@ class Post {
 
       return result;
     }catch(error){
-      console.log({ error: error });
+      console.log({ error });
+    }
+  }
+
+  async insertPost(title, slug, body, user_id) {
+    try{
+      await knex("tbl_posts")
+      .insert({
+        title, slug, body, user_id
+      });
+    }catch(error){
+      return console.log({ error });
     }
   }
 }

@@ -64,6 +64,39 @@ class PostController{
       return res.status(500).json({ error });
     }
   }
+
+  async updatePost(req, res) {
+    try{
+      const { id } = req.params;
+      const { title, slug, body } = req.body;
+
+      const postExists = await Post.findById(id);
+
+      if(isNaN(id)){
+        return res.status(400).json({ error: "Id must be a number" });
+      }else if(!(postExists.length > 0)){
+        return res.status(400).json({ error: "Post cannot be found" });
+      }
+
+      if(title == undefined || title == ""){
+        return res.status(400).json({ error: "Title cannot be undefined or empty" });
+      }
+
+      if(slug == undefined || slug == ""){
+        return res.status(400).json({ error: "Slug cannot be undefined or empty" });
+      }
+
+      if(body == undefined || body == ""){
+        return res.status(400).json({ error: "Body cannot be undefined or empty" });
+      }
+
+      await Post.updatePost(id, title, slug, body);
+
+      return res.status(200).json({ success: "Post has been updated" });
+    }catch(error){
+      return res.status(500).json({ error: "Something is wrong" });
+    }
+  }
 }
 
 module.exports = new PostController();

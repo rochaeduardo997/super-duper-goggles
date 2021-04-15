@@ -10,7 +10,7 @@ class Post {
 
       return result;
     }catch(error){
-      return console.log({ error });
+      return console.error({ error });
     }
   }
 
@@ -24,7 +24,7 @@ class Post {
 
       return result;
     }catch(error){
-      console.log({ error });
+      console.error({ error });
     }
   }
 
@@ -35,7 +35,37 @@ class Post {
         title, slug, body, user_id
       });
     }catch(error){
-      return console.log({ error });
+      return console.error({ error });
+    }
+  }
+
+  async updatePost(id, title, slug, body) {
+    try{
+      let postObject = {};
+
+      if(title == undefined || title.length < 0){
+        return console.log({ error: "Title cannot be undefined or empty" });
+      }else{
+        postObject.title = title;
+      }
+
+      if(slug == undefined || slug.length < 0){
+        return console.log({ error: "Slug cannot be undefined or empty" });
+      }else{
+        postObject.slug = slug;
+      }
+
+      if(body == undefined || body.length < 0){
+        return console.log({ error: "Body cannot be undefined or empty" });
+      }else{
+        postObject.body = body;
+      }
+
+      await knex("tbl_posts")
+      .update(postObject)
+      .where({ id: id });
+    }catch(error){
+      return console.error({ error });
     }
   }
 }

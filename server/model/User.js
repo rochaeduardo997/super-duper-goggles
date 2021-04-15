@@ -2,26 +2,26 @@ const bcrypt = require("bcrypt");
 
 const knex = require("../database/connection");
 
-class User{
-  async findUsers(){
-    try{
+class User {
+  async findUsers() {
+    try {
       const result = await knex.select(["id", "firstName", "lastName", "username", "email"]).from("tbl_users");
       return result;
-    }catch(error){
+    } catch (error) {
       return console.error({
         "error": error
       });
     }
   }
 
-  async findById(id){
-    try{
+  async findById(id) {
+    try {
       const result = await knex.select(["id", "firstName", "lastName", "username", "email"]).from("tbl_users").where({ id: id });
 
-      if(result.length > 0){
+      if (result.length > 0) {
         return result;
       }
-    }catch(error){
+    } catch (error) {
       return console.log({
         "error": error
       });
@@ -29,23 +29,23 @@ class User{
   }
 
   async findByEmail(email) {
-    try{
+    try {
       const result = await knex.select(["id", "firstName", "lastName", "username", "email", "password", "role"]).table("tbl_users").where({ email: email });
 
-      if(result.length > 0){
+      if (result.length > 0) {
         return result[0];
-      }else{
+      } else {
         return false;
       }
-    }catch(error){
+    } catch (error) {
       return console.log({
         "error": error
       });
     }
   }
 
-  async insertUser(firstName, lastName, username, email, password){
-    try{
+  async insertUser(firstName, lastName, username, email, password) {
+    try {
       const hashPassword = await bcrypt.hash(password, 1);
 
       await knex.insert({
@@ -56,40 +56,38 @@ class User{
         password: hashPassword,
         role: 0
       }).from("tbl_users");
-    }catch(error){
+    } catch (error) {
       console.log({
         "error": error
       });
     }
   }
 
-  async deleteById(id){
-    try{
+  async deleteById(id) {
+    try {
       const result = knex.delete().where({ id: id }).table("tbl_users");
 
       return result;
-    }catch(error){
-      return console.error({
-        "error": error
-      });
+    } catch (error) {
+      return console.error({ "error": error });
     }
   }
 
-  async updateUser(id, firstName, lastName, username, email){
-    try{
+  async updateUser(id, firstName, lastName, username, email) {
+    try {
       let userObject = {}
 
-      if(firstName != "" && firstName != undefined && isNaN(firstName)){
+      if (firstName != "" && firstName != undefined && isNaN(firstName)) {
         userObject.firstName = firstName;
-      }else{
+      } else {
         return console.log({
           "error": "First name cannot be empty or a number"
         });
       }
 
-      if(isNaN(lastName)){
+      if (isNaN(lastName)) {
         userObject.lastName = lastName;
-      }else{
+      } else {
         return console.log({
           "error": "Last name cannot be a number"
         });
@@ -98,15 +96,15 @@ class User{
       const resultUsername = await this.checkUsername(username);
       // console.log(resultUsername);
 
-      if(!resultUsername){
-        if(username != "" && isNaN(username)){
+      if (!resultUsername) {
+        if (username != "" && isNaN(username)) {
           userObject.username = username;
-        }else{
+        } else {
           return console.log({
             "error": "Username cannot be empty or a number"
           });
         }
-      }else{
+      } else {
         return console.log({
           "error": "Username already in use"
         });
@@ -114,15 +112,15 @@ class User{
 
       const resultEmail = await this.checkEmail(email);
 
-      if(!resultEmail){
-        if(email != "" && isNaN(email)){
+      if (!resultEmail) {
+        if (email != "" && isNaN(email)) {
           userObject.email = email;
-        }else{
+        } else {
           return console.log({
             "error": "Email cannot be empty or a number"
           });
         }
-      }else{
+      } else {
         return console.log({
           "error": "Email already in use"
         });
@@ -131,23 +129,23 @@ class User{
       const result = await knex.update(userObject).table("tbl_users").where({ id: id });
 
       return result;
-    }catch(error){
+    } catch (error) {
       console.log({
         "error": error
       });
     }
   }
 
-  async checkUsername(username){
-    try{
+  async checkUsername(username) {
+    try {
       const result = await knex.select().from("tbl_users").where({ username: username });
 
-      if(result == ""){
+      if (result == "") {
         return false;
-      }else{
+      } else {
         return true;
       }
-    }catch(error){
+    } catch (error) {
       console.log({
         "error": error
       });
@@ -155,18 +153,18 @@ class User{
     }
   }
 
-  async checkEmail(email){
-    try{
+  async checkEmail(email) {
+    try {
       const emailResult = await knex.select().from("tbl_users").where({ email: email });
 
       // console.log(emailResult);
 
-      if(emailResult == ""){
+      if (emailResult == "") {
         return false;
-      }else{
+      } else {
         return true;
       }
-    }catch(error){
+    } catch (error) {
       console.log({
         "error": error
       });

@@ -1,58 +1,58 @@
 const Post = require("../model/Post");
 const User = require("../model/User");
 
-class PostController{
-  async index(req, res){
-    try{
+class PostController {
+  async index(req, res) {
+    try {
       const result = await Post.findPosts();
 
-      res.json({result});
-    }catch(error){
+      res.json({ result });
+    } catch (error) {
       return res.status(500).json(error);
     }
   }
 
   async findById(req, res) {
-    try{
+    try {
       const { id } = req.params;
 
-      if(id == undefined || isNaN(id)){
+      if (id == undefined || isNaN(id)) {
         return res.status(400).json({ error: "Invalid id" });
       }
 
       const postById = await Post.findById(id);
 
-      if(JSON.stringify(postById) == undefined){
+      if (JSON.stringify(postById) == undefined) {
         return res.status(404).json({ error: "Post cannot be found" });
       }
 
       console.log({ success: "Post has be found by id" });
 
       return res.status(200).json(postById);
-    }catch(error){
+    } catch (error) {
       return res.status(500).json(error);
     }
   }
 
   async createNew(req, res) {
-    try{
+    try {
       const { title, slug, body, user_id } = req.body;
 
-      if(title == undefined || title == ""){
+      if (title == undefined || title == "") {
         return res.status(400).json({ error: "Title cannot be undefined or empty" });
       }
-      if(slug == undefined || slug == ""){
+      if (slug == undefined || slug == "") {
         return res.status(400).json({ error: "Slug cannot be undefined or empty" });
       }
-      if(body == undefined || body == ""){
+      if (body == undefined || body == "") {
         return res.status(400).json({ error: "Body cannot be undefined or empty" });
       }
-      if(user_id == undefined || user_id == ""){
+      if (user_id == undefined || user_id == "") {
         return res.status(400).json({ error: "User id cannot be undefined or empty" });
       }
 
       const userById = await User.findById(user_id);
-      if(userById == undefined || userById == []){
+      if (userById == undefined || userById == []) {
         return res.status(404).json({ error: "User cannot be found" });
       }
 
@@ -60,40 +60,58 @@ class PostController{
       console.log({ success: "Post has been created" });
 
       return res.status(200).json({ success: "Post has been created" });
-    }catch(error){
+    } catch (error) {
       return res.status(500).json({ error });
     }
   }
 
+  async deleteById(req, res) {
+    const { id } = req.params;
+
+    const postById = await Post.findById(id);
+
+    if (isNaN(id)) {
+      return res.status(400).json({ error: "Id must be a number" });
+    }
+
+    if (postById.length <= 0) {
+      return res.status(404).json({ error: "Post not found" });
+    }
+
+    const result = await Post.deleteById(id);
+
+    return res.status(200).json({ success: "Post has been deleted" });
+  }
+
   async updatePost(req, res) {
-    try{
+    try {
       const { id } = req.params;
       const { title, slug, body } = req.body;
 
       const postExists = await Post.findById(id);
 
-      if(isNaN(id)){
+      if (isNaN(id)) {
         return res.status(400).json({ error: "Id must be a number" });
-      }else if(!(postExists.length > 0)){
+      } else if (!(postExists.length > 0)) {
         return res.status(400).json({ error: "Post cannot be found" });
       }
 
-      if(title == undefined || title == ""){
+      if (title == undefined || title == "") {
         return res.status(400).json({ error: "Title cannot be undefined or empty" });
       }
 
-      if(slug == undefined || slug == ""){
+      if (slug == undefined || slug == "") {
         return res.status(400).json({ error: "Slug cannot be undefined or empty" });
       }
 
-      if(body == undefined || body == ""){
+      if (body == undefined || body == "") {
         return res.status(400).json({ error: "Body cannot be undefined or empty" });
       }
 
       await Post.updatePost(id, title, slug, body);
 
       return res.status(200).json({ success: "Post has been updated" });
-    }catch(error){
+    } catch (error) {
       return res.status(500).json({ error: "Something is wrong" });
     }
   }

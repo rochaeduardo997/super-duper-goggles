@@ -23,6 +23,7 @@ router.post("/login", UserController.loginUser);
 router.get("/posts", PostController.index);
 router.get("/post/:id", PostController.findById);
 router.post("/post", PostController.createNew);
+router.delete("/post/:id", PostController.deleteById);
 router.put("/post/:id", PostController.updatePost);
 
 module.exports = router;

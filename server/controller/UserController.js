@@ -6,14 +6,14 @@ const User = require("../model/User");
 
 class UserController {
   async index(req, res) {
-    try{
+    try {
       const users = await User.findUsers();
       console.log({
         "success": "Users has be found"
       });
 
       return res.status(200).json(users);
-    }catch(error){
+    } catch (error) {
       console.error({
         "error": error
       });
@@ -24,12 +24,12 @@ class UserController {
   }
 
   async findById(req, res) {
-    try{
+    try {
       const { id } = req.params;
 
       // console.log(id);
 
-      if(id == undefined || isNaN(id)){
+      if (id == undefined || isNaN(id)) {
         return res.status(400).json({
           error: "Invalid id"
         })
@@ -37,7 +37,7 @@ class UserController {
 
       const userById = await User.findById(id);
 
-      if(JSON.stringify(userById) == undefined){
+      if (JSON.stringify(userById) == undefined) {
         return res.status(404).json({
           error: "User cannot be found by id"
         });
@@ -49,7 +49,7 @@ class UserController {
       return res.json({
         userById
       });
-    }catch(error){
+    } catch (error) {
       console.log({
         "error": error
       });
@@ -60,7 +60,7 @@ class UserController {
   }
 
   async createNew(req, res) {
-    try{
+    try {
       const { firstName, lastName, username, email, password } = req.body;
 
       const checkUsername = await User.checkUsername(username);
@@ -68,43 +68,43 @@ class UserController {
       // console.log(checkUsername);
       // console.log(checkEmail);
 
-      if(firstName == undefined){
+      if (firstName == undefined) {
         return res.status(400).json({
           error: "Invalid input for firstName"
         });
       }
 
-      if(!isNaN(lastName)){
+      if (!isNaN(lastName)) {
         return res.status(400).json({
           error: "Last name cannot be a number"
         });
       }
 
-      if(username == undefined ){
+      if (username == undefined) {
         return res.status(400).json({
           error: "Invalid input for username"
         });
       }
 
-      if(checkUsername){
+      if (checkUsername) {
         return res.status(400).json({
           error: "Username already been used"
         });
       }
 
-      if(email == undefined){
+      if (email == undefined) {
         return res.status(400).json({
           error: "Invalid input for email"
         });
       }
 
-      if(checkEmail){
+      if (checkEmail) {
         return res.status(400).json({
           error: "Email already been used"
         });
       }
 
-      if(password == undefined){
+      if (password == undefined) {
         return res.status(400).json({
           error: "Invalid input for password"
         });
@@ -118,7 +118,7 @@ class UserController {
       return console.log({
         "success": "User has been registered"
       });
-    }catch(error){
+    } catch (error) {
       console.log({
         "error": error
       });
@@ -129,17 +129,17 @@ class UserController {
   }
 
   async deleteById(req, res) {
-    try{
+    try {
       const { id } = req.params;
       const userById = await User.findById(id);
 
-      if(id == undefined || isNaN(id)){
+      if (id == undefined || isNaN(id)) {
         return res.status(400).json({
           error: "Invalid id"
         });
       }
 
-      if(JSON.stringify(userById) == undefined){
+      if (JSON.stringify(userById) == undefined) {
         return res.status(404).json({
           error: "User cannot be found",
         });
@@ -153,7 +153,7 @@ class UserController {
       return res.status(200).json({
         success: "User has been deleted"
       });
-    }catch(error){
+    } catch (error) {
       console.log({
         "error": error
       });
@@ -164,44 +164,44 @@ class UserController {
   }
 
   async updateUser(req, res) {
-    try{
+    try {
       const { id } = req.params;
       const { firstName, lastName, username, email } = req.body;
 
       const checkUsername = await User.checkUsername(username);
       const checkEmail = await User.checkEmail(email);
 
-      if(firstName == undefined && firstName == " " && isNaN(firstName)){
+      if (firstName == undefined && firstName == " " && isNaN(firstName)) {
         return res.status(400).json({
           error: "First name cannot be empty or a number"
         });
       }
 
-      if(!isNaN(lastName)){
+      if (!isNaN(lastName)) {
         return res.status(400).json({
           error: "Last name cannot be a number"
         });
       }
 
-      if(username == undefined ){
+      if (username == undefined) {
         return res.status(400).json({
           error: "Invalid input for username"
         });
       }
 
-      if(checkUsername){
+      if (checkUsername) {
         return res.status(400).json({
           error: "Username already been used"
         });
       }
 
-      if(email == undefined){
+      if (email == undefined) {
         return res.status(400).json({
           error: "Invalid input for email"
         });
       }
 
-      if(checkEmail){
+      if (checkEmail) {
         return res.status(400).json({
           error: "Email already been used"
         });
@@ -215,7 +215,7 @@ class UserController {
       return res.status(200).json({
         success: "User has been updated"
       })
-    }catch(error){
+    } catch (error) {
       console.log({
         "error": error
       });
@@ -231,17 +231,17 @@ class UserController {
     const userFoundByEmail = await User.findByEmail(email);
     // console.log(userFoundByEmail.password);
 
-    if(userFoundByEmail != false){
+    if (userFoundByEmail != false) {
       const passwordMatch = await bcrypt.compare(password, userFoundByEmail.password);
       // console.log(passwordMatch);
 
-      if(passwordMatch){
+      if (passwordMatch) {
         const token = jwt.sign({ email: userFoundByEmail.email, role: userFoundByEmail.role }, secret);
         return res.status(200).json({
           success: passwordMatch,
           token: token
         });
-      }else{
+      } else {
         return res.status(401).json({
           error: "Password don\'t match"
         });

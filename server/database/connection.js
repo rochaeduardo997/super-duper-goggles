@@ -45,11 +45,11 @@ MariaDB [db_blog]> CREATE TABLE tbl_comments(
     -> body TEXT NOT NULL,
     -> post_id INT NOT NULL,
     -> FOREIGN KEY (post_id)
-    -> REFERENCES tbl_posts(id),
+    -> REFERENCES tbl_posts(id)
+    -> ON DELETE CASCADE,
     -> user_id INT NOT NULL,
     -> FOREIGN KEY (user_id)
     -> REFERENCES tbl_users(id)
-    -> ON DELETE CASCADE
     -> );
 Query OK, 0 rows affected (0.021 sec)
 */

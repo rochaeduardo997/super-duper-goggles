@@ -41,7 +41,36 @@ class Comments {
       await knex("tbl_comments")
         .insert(commentObject);
     } catch (error) {
-      return console.log({ error });
+      return console.error({ error });
+    }
+  }
+
+  async deleteById(id) {
+    try {
+      const result = await knex("tbl_comments")
+        .delete()
+        .where({ "id": id });
+
+      return result;
+    } catch (error) {
+      return console.error({ error });
+    }
+  }
+
+  async findCommentById(id) {
+    try {
+      const result = await knex("tbl_comments")
+        .select()
+        .where({ "id": id });
+
+      if (result.length > 0) {
+        return true
+      }
+
+      return false;
+    } catch (error) {
+      console.log({ error });
+      return false;
     }
   }
 }

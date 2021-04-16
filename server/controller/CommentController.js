@@ -36,6 +36,29 @@ class CommentController {
       return res.status(500).json({ error });
     }
   }
+
+  async deleteById(req, res) {
+    try {
+      const { id } = req.params;
+
+      if (id == undefined || id == "") {
+        return res.status(400).json({ error: "ID cannot be undefined or empty" });
+      }
+
+      const result = await Comments.findCommentById(id);
+      console.log(result)
+
+      if (result === false) {
+        return res.status(400).json({ error: "Comment cannot be found" });
+      }
+
+      await Comments.deleteById(id);
+
+      return res.status(200).json({ success: "Comment has been deleted" });
+    } catch (error) {
+      return res.status(500).json({ error });
+    }
+  }
 }
 
 module.exports = new CommentController();

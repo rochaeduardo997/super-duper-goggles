@@ -229,7 +229,6 @@ class UserController {
     const { email, password } = req.body;
 
     const userFoundByEmail = await User.findByEmail(email);
-    // console.log(userFoundByEmail.password);
 
     if (userFoundByEmail != false) {
       const passwordMatch = await bcrypt.compare(password, userFoundByEmail.password);

@@ -95,6 +95,25 @@ class Comments {
       return false;
     }
   }
+
+  async findCommentByIdAndEmail(id, email) {
+    try {
+      const result = await knex("tbl_comments")
+        .select()
+        .join("tbl_users", "tbl_users.id", "=", "tbl_comments.user_id")
+        .where({ "tbl_users.email": email, "tbl_comments.id": id });
+
+      if (result.length <= 0) {
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      console.log({ error });
+
+      return false;
+    }
+  }
 }
 
 module.exports = new Comments();

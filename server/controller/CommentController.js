@@ -35,7 +35,7 @@ class CommentController {
 
       await Comments.insertComment(body, post_id, user_id);
 
-      return res.status(200).json({ success: "ok" });
+      return res.status(200).json({ success: "Comment has been created" });
     } catch (error) {
       return res.status(500).json({ error });
     }
@@ -44,13 +44,25 @@ class CommentController {
   async deleteById(req, res) {
     try {
       const { id } = req.params;
+      const email = req.email;
+
+      const commentExists = await Comments.findCommentById(id);
+
+      if (commentExists == false) {
+        return res.status(404).json({ error: "Comment not found or don\'t exists" });
+      }
+
+      const isAuth = await Comments.findCommentByIdAndEmail(id, email);
+
+      if (isAuth == false) {
+        return res.status(401).json({ error: "You don\'t have authorization for this" });
+      }
 
       if (id == undefined || id == "") {
         return res.status(400).json({ error: "ID cannot be undefined or empty" });
       }
 
       const result = await Comments.findCommentById(id);
-      console.log(result)
 
       if (result === false) {
         return res.status(400).json({ error: "Comment cannot be found" });
@@ -68,6 +80,19 @@ class CommentController {
     try {
       const { id } = req.params;
       const { body } = req.body;
+      const email = req.email;
+
+      const commentExists = await Comments.findCommentById(id);
+
+      if (commentExists == false) {
+        return res.status(404).json({ error: "Comment not found or don\'t exists" });
+      }
+
+      const isAuth = await Comments.findCommentByIdAndEmail(id, email);
+
+      if (isAuth == false) {
+        return res.status(401).json({ error: "You don\'t have authorization for this" });
+      }
 
       if (id == undefined) {
         return res.status(400).json({ error: "ID cannot be undefined" });

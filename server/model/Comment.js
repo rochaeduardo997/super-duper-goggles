@@ -4,7 +4,7 @@ class Comments {
   async findById(post_id) {
     try {
       const result = await knex("tbl_comments")
-        .select(["tbl_comments.id", "tbl_comments.body",
+        .select(["tbl_comments.id", "tbl_comments.body", "tbl_comments.createdAt", "tbl_comments.updatedAt",
           "tbl_users.username"])
         .join("tbl_posts", "tbl_posts.id", "=", "tbl_comments.post_id")
         .join("tbl_users", "tbl_users.id", "=", "tbl_comments.user_id")
@@ -52,6 +52,28 @@ class Comments {
         .where({ "id": id });
 
       return result;
+    } catch (error) {
+      return console.error({ error });
+    }
+  }
+
+  async updateById(id, body) {
+    try {
+      if (id == undefined) {
+        return console.log({ error: "Comment ID cannot be undefined" });
+      } else if (isNaN(id)) {
+        return console.log({ error: "Comment ID must be a number" });
+      }
+
+      if (body == undefined || body == "") {
+        return console.log({ error: "Comment body cannot be undefined or empty" });
+      }
+
+      await knex("tbl_comments")
+        .update({ "body": body })
+        .where({ "id": id });
+
+      return console.log("Comment has been successful updated");
     } catch (error) {
       return console.error({ error });
     }

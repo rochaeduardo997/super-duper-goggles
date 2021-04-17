@@ -44,6 +44,8 @@ MariaDB [db_blog]> CREATE TABLE tbl_comments(
     -> id INT AUTO_INCREMENT PRIMARY KEY,
     -> body TEXT NOT NULL,
     -> post_id INT NOT NULL,
+    -> createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    -> updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     -> FOREIGN KEY (post_id)
     -> REFERENCES tbl_posts(id)
     -> ON DELETE CASCADE,

@@ -44,7 +44,7 @@ class User {
     }
   }
 
-  async insertUser(firstName, lastName, username, email, password) {
+  async insertUser(firstName, lastName, username, email, password, role) {
     try {
       const hashPassword = await bcrypt.hash(password, 1);
 
@@ -54,7 +54,7 @@ class User {
         username,
         email,
         password: hashPassword,
-        role: 0
+        role: role
       }).from("tbl_users");
     } catch (error) {
       console.log({
@@ -138,7 +138,7 @@ class User {
 
   async checkUsername(username) {
     try {
-      const result = await knex.select().from("tbl_users").where({ username: username });
+      const result = await knex.select("id").from("tbl_users").where({ username: username });
 
       if (result == "") {
         return false;
@@ -146,10 +146,19 @@ class User {
         return true;
       }
     } catch (error) {
-      console.log({
-        "error": error
-      });
+      console.log({ "error": error });
       return false;
+    }
+  }
+
+  //only for tests
+  async returnIdFromUsername(username) {
+    try {
+      const result = await knex("tbl_users").select("id").where({ username: username });
+
+      return JSON.stringify(result).replace(/\D/g, "");
+    } catch (error) {
+      return console.log({ error });
     }
   }
 

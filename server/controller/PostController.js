@@ -6,9 +6,9 @@ class PostController {
     try {
       const result = await Post.findPosts();
 
-      res.json({ result });
+      return res.json({ status: true, result });
     } catch (error) {
-      return res.status(500).json(error);
+      return res.status(500).json({ status: true, error });
     }
   }
 
@@ -26,9 +26,9 @@ class PostController {
         return res.status(404).json({ error: "Post cannot be found" });
       }
 
-      console.log({ success: "Post has be found by id" });
+      console.log({ status: true, success: "Post has be found by id" });
 
-      return res.status(200).json(postById);
+      return res.status(200).json({ status: true, postById });
     } catch (error) {
       return res.status(500).json(error);
     }
@@ -59,7 +59,7 @@ class PostController {
       await Post.insertPost(title, slug, body, user_id);
       console.log({ success: "Post has been created" });
 
-      return res.status(200).json({ success: "Post has been created" });
+      return res.status(200).json({ status: true, success: "Post has been created" });
     } catch (error) {
       return res.status(500).json({ error });
     }
@@ -71,16 +71,16 @@ class PostController {
     const postById = await Post.findById(id);
 
     if (isNaN(id)) {
-      return res.status(400).json({ error: "Id must be a number" });
+      return res.status(400).json({ status: false, error: "Id must be a number" });
     }
 
     if (postById.length <= 0) {
-      return res.status(404).json({ error: "Post not found" });
+      return res.status(404).json({ status: false, error: "Post not found" });
     }
 
     const result = await Post.deleteById(id);
 
-    return res.status(200).json({ success: "Post has been deleted" });
+    return res.status(200).json({ status: true, success: "Post has been deleted" });
   }
 
   async updatePost(req, res) {
@@ -91,28 +91,28 @@ class PostController {
       const postExists = await Post.findById(id);
 
       if (isNaN(id)) {
-        return res.status(400).json({ error: "Id must be a number" });
+        return res.status(400).json({ status: false, error: "Id must be a number" });
       } else if (!(postExists.length > 0)) {
-        return res.status(400).json({ error: "Post cannot be found" });
+        return res.status(400).json({ status: false, error: "Post cannot be found" });
       }
 
       if (title == undefined || title == "") {
-        return res.status(400).json({ error: "Title cannot be undefined or empty" });
+        return res.status(400).json({ status: false, error: "Title cannot be undefined or empty" });
       }
 
-      if (slug == undefined || slug == "") {
-        return res.status(400).json({ error: "Slug cannot be undefined or empty" });
+      if (slug == undefined || slug == "" || slug.length > 10) {
+        return res.status(400).json({ status: false, error: "Slug cannot be undefined or empty" });
       }
 
       if (body == undefined || body == "") {
-        return res.status(400).json({ error: "Body cannot be undefined or empty" });
+        return res.status(400).json({ status: false, error: "Body cannot be undefined or empty" });
       }
 
       await Post.updatePost(id, title, slug, body);
 
-      return res.status(200).json({ success: "Post has been updated" });
+      return res.status(200).json({ status: true, success: "Post has been updated" });
     } catch (error) {
-      return res.status(500).json({ error: "Something is wrong" });
+      return res.status(500).json({ status: false, error: "Something is wrong" });
     }
   }
 }

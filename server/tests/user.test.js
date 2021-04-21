@@ -6,7 +6,7 @@ const { returnIdFromUsername } = require("../model/User");
 
 const bearerToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNhcmxvc0BlbWFpbC5jb20iLCJyb2xlIjoxLCJpYXQiOjE2MTg2NjYxNTh9.TzrgJWj71LF_8AoStF25VYg2nHYuOJJsHTFKBI07pPg"
 
-test("Should FIND ALL, return an array of users greater than zero and status true", async () => {
+test("Should FIND ALL users, return an array of users greater than zero and status true", async () => {
   const axiosResult = await axios({
     headers: {
       Authorization: `Bearer ${bearerToken}`
@@ -24,7 +24,7 @@ test("Should FIND ALL, return an array of users greater than zero and status tru
   expect(userData.status).toEqual(true);
 });
 
-test("Should FIND ONE, return only an user and array must be equals to one and status true", async () => {
+test("Should FIND ONE user, return only an user and array must be equals to one and status true", async () => {
   const axiosResult = await axios({
     headers: {
       Authorization: `Bearer ${bearerToken}`
@@ -59,8 +59,9 @@ test("Should CREATE an user and return status true", async () => {
 
   const userData = axiosResult.data;
 
-  // console.log(userData.status);
+  // console.log(userData);
 
+  expect(userData.success).toEqual("User has been registered");
   expect(userData.status).toEqual(true);
 });
 
@@ -85,11 +86,11 @@ test("Should UPDATE an user and return status true", async () => {
   });
 
   const userData = axiosResult.data;
-  // console.log(userData.status);
+  // console.log(userData);
 
-
+  expect(userData.success).toEqual("User has been updated");
   expect(userData.status).toEqual(true);
-})
+});
 
 test("Should DELETE an user and return status true", async () => {
   const username = "testtestjest";
@@ -108,7 +109,7 @@ test("Should DELETE an user and return status true", async () => {
   const userData = axiosResult.data;
   // console.log(userData.status);
 
-  //jest dont finish the execution without database connection was closed
+  //jest don't finish the execution without database connection was closed
   await knex.destroy();
 
   expect(userData.status).toEqual(true);

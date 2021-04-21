@@ -8,9 +8,14 @@ class UserController {
   async index(req, res) {
     try {
       const users = await User.findUsers();
-      console.log({ "success": "Users has be found" });
 
-      return res.status(200).json({ status: true, users });
+      if (users.length > 1) {
+        console.log({ "success": "Users has be found" });
+
+        return res.status(200).json({ status: true, users });
+      }
+
+      return res.status(400).json({ status: false, error: "Users cannot be found" });
     } catch (error) {
       console.error({ "error": error });
       return res.status(500).json({ status: false, error: "Something is wrong" });

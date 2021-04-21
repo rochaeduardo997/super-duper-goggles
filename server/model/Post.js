@@ -80,6 +80,19 @@ class Post {
       return console.error({ error });
     }
   }
+
+  //only for tests
+  async findPostByTitle(title) {
+    try {
+      const result = await knex("tbl_posts")
+        .select("id")
+        .where({ "title": title });
+
+      return JSON.stringify(result).replace(/\D/g, "");
+    } catch (error) {
+      return console.log(error);
+    }
+  }
 }
 
 module.exports = new Post();

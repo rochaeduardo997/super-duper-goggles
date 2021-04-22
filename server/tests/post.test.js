@@ -97,7 +97,7 @@ test("Should UPDATE a post and return status true", async () => {
 
 test("Should DELETE a post and return status true", async () => {
   const idReturned = await findPostByTitle("titulozinho");
-  console.log(idReturned);
+  // console.log(idReturned);
 
   const axiosResult = await axios({
     headers: {
@@ -106,7 +106,7 @@ test("Should DELETE a post and return status true", async () => {
     url: `http://localhost:5001/post/${idReturned}`,
     method: "delete"
   });
-  console.log(axiosResult);
+  // console.log(axiosResult);
 
   const axiosResultMessage = axiosResult.data.success;
   // console.log(axiosResultMessage);

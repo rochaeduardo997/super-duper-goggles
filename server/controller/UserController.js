@@ -160,25 +160,26 @@ class UserController {
   }
 
   async loginUser(req, res) {
-    const { email, password } = req.body;
+    try {
+      const { email, password } = req.body;
 
-    const userFoundByEmail = await User.findByEmail(email);
+      const userFoundByEmail = await User.findByEmail(email);
 
-    if (userFoundByEmail != false) {
-      const passwordMatch = await bcrypt.compare(password, userFoundByEmail.password);
-      // console.log(passwordMatch);
+      if (userFoundByEmail != false) {
+        const passwordMatch = await bcrypt.compare(password, userFoundByEmail.password);
+        // console.log(passwordMatch);
 
-      if (passwordMatch) {
-        const token = jwt.sign({ email: userFoundByEmail.email, role: userFoundByEmail.role }, secret);
-        return res.status(200).json({
-          success: passwordMatch,
-          token: token
-        });
+        if (passwordMatch) {
+          const token = jwt.sign({ email: userFoundByEmail.email, role: userFoundByEmail.role }, secret);
+          return res.status(200).json({ status: true, success: passwordMatch, token: token });
+        } else {
+          return res.status(401).json({ status: false, error: "Email/Password don\'t match" });
+        }
       } else {
-        return res.status(401).json({
-          error: "Password don\"t match"
-        });
+        return res.status(401).json({ status: false, error: "Email/Password don\'t match" });
       }
+    } catch (error) {
+      return res.status(500).json({ status: false, error: "Something is wrong" });
     }
   }
 }

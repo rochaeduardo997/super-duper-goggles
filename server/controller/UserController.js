@@ -55,36 +55,32 @@ class UserController {
       // console.log(checkUsername);
       // console.log(checkEmail);
 
-      if (firstName == undefined) {
-        return res.status(400).json({ status: false, error: "Invalid input for firstName" });
+      if (firstName == undefined || firstName == "" || firstName == " ") {
+        return res.status(400).json({ status: false, error: "Invalid first name" });
       }
 
-      if (!isNaN(lastName)) {
+      if (typeof (lastName) != "string") {
         return res.status(400).json({ status: false, error: "Last name cannot be a number" });
       }
 
-      if (username == undefined) {
-        return res.status(400).json({ status: false, error: "Invalid input for username" });
+      if (username == undefined || username == "" || username == " ") {
+        return res.status(400).json({ status: false, error: "Invalid username" });
       }
 
       if (checkUsername) {
         return res.status(400).json({ status: false, error: "Username already been used" });
       }
 
-      if (email == undefined) {
-        return res.status(400).json({ status: false, error: "Invalid input for email" });
+      if (email == undefined || email == "" || email == " ") {
+        return res.status(400).json({ status: false, error: "Invalid email" });
       }
 
       if (checkEmail) {
         return res.status(400).json({ status: false, error: "Email already been used" });
       }
 
-      if (password == undefined) {
-        return res.status(400).json({ status: false, error: "Invalid input for password" });
-      }
-
-      if (role != -1) {
-        role = 0;
+      if (password == undefined || password == "" || password == " ") {
+        return res.status(400).json({ status: false, error: "Invalid password" });
       }
 
       await User.insertUser(firstName, lastName, username, email, password, role);
@@ -180,7 +176,7 @@ class UserController {
         });
       } else {
         return res.status(401).json({
-          error: "Password don\'t match"
+          error: "Password don\"t match"
         });
       }
     }

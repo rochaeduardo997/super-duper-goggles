@@ -13,5 +13,6 @@ router.post("/user", UserController.createNew);
 router.delete("/user/:id", AdminAuth, UserController.deleteById);
 router.put("/user/:id", AdminAuth, UserController.updateUser);
 router.post("/login", UserController.loginUser);
+router.post("/validate", AdminAuth, UserController.validateToken);
 
 module.exports = router;

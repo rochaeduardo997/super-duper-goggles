@@ -182,6 +182,10 @@ class UserController {
       return res.status(500).json({ status: false, error: "Something is wrong" });
     }
   }
+
+  async validateToken(req, res) {
+    return res.status(200).send('ok');
+  }
 }
 
 module.exports = new UserController();

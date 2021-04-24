@@ -2,6 +2,30 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import Register from '../views/Register.vue'
 import Login from '../views/Login.vue'
+import Users from '../views/Users.vue'
+
+import axios from 'axios'
+
+function adminAuth(to, from, next) {
+  const bearerToken = localStorage.getItem('token');
+
+  if (bearerToken != undefined) {
+    axios({
+      headers: {
+        Authorization: `Bearer ${bearerToken}`
+      },
+      url: "http://localhost:5001/validate",
+      method: "post",
+    }).then(() => {
+      next();
+    }).catch((err) => {
+      console.log(err);
+      next('/login');
+    });
+  } else {
+    next('/login');
+  }
+}
 
 const routes = [
   {
@@ -18,6 +42,12 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: Login
+  },
+  {
+    path: '/admin/users',
+    name: 'Users',
+    component: Users,
+    beforeEnter: adminAuth
   }
 ]
 

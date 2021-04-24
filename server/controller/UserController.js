@@ -9,7 +9,7 @@ class UserController {
     try {
       const users = await User.findUsers();
 
-      if (users.length > 1) {
+      if (users.length >= 1) {
         console.log({ "success": "Users has be found" });
 
         return res.status(200).json({ status: true, users });

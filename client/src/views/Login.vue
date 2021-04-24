@@ -74,7 +74,7 @@ export default {
         .catch((error) => {
           this.error = error.response.data.error;
 
-          console.log(this.error);
+          // console.log(this.error);
         });
     },
   },

@@ -99,7 +99,6 @@ export default {
 
   methods: {
     registerUser() {
-      console.log(this.firstName);
       axios({
         url: "http://localhost:5001/user",
         method: "post",
@@ -117,8 +116,6 @@ export default {
         })
         .catch((error) => {
           this.error = error.response.data.error;
-
-          console.log(this.error);
         });
     },
   },

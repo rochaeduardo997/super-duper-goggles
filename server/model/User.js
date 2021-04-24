@@ -5,7 +5,7 @@ const knex = require("../database/connection");
 class User {
   async findUsers() {
     try {
-      const result = await knex.select(["id", "firstName", "lastName", "username", "email"]).from("tbl_users");
+      const result = await knex.select(["id", "firstName", "lastName", "username", "email", "role"]).from("tbl_users");
       return result;
     } catch (error) {
       return console.error({
@@ -16,7 +16,7 @@ class User {
 
   async findById(id) {
     try {
-      const result = await knex.select(["id", "firstName", "lastName", "username", "email"]).from("tbl_users").where({ id: id });
+      const result = await knex("tbl_users").select(["id", "firstName", "lastName", "username", "email"]).where({ id: id });
 
       if (result.length > 0) {
         return result;

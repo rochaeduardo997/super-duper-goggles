@@ -23,23 +23,23 @@
           v-model="usersToEdit.lastName"
         />
 
-        <br /><br />
+        <!-- <br /><br />
         <label>Usuário</label>
         <input
           class="input"
           type="text"
           placeholder="usuario"
           v-model="usersToEdit.username"
-        />
+        /> -->
 
-        <br /><br />
+        <!-- <br /><br />
         <label>E-mail</label>
         <input
           class="input"
           type="text"
           placeholder="email"
           v-model="usersToEdit.email"
-        />
+        /> -->
 
         <br /><br />
         <label>Admin</label>
@@ -123,8 +123,6 @@ export default {
       console.log(
         this.usersToEdit.firstName,
         this.usersToEdit.lastName,
-        this.usersToEdit.username,
-        this.usersToEdit.email,
         this.usersToEdit.role
       );
       const bearerToken = localStorage.getItem("token");
@@ -137,8 +135,6 @@ export default {
         data: {
           firstName: this.usersToEdit.firstName,
           lastName: this.usersToEdit.lastName,
-          username: this.usersToEdit.username,
-          email: this.usersToEdit.email,
           role: this.usersToEdit.role,
         },
       })

@@ -5,7 +5,7 @@ const knex = require("../database/connection");
 class User {
   async findUsers() {
     try {
-      const result = await knex.select(["id", "firstName", "lastName", "username", "email", "role"]).from("tbl_users");
+      const result = await knex.select(["id", "firstName", "lastName", "username", "email", "role", "createdAt", "updatedAt"]).from("tbl_users");
       return result;
     } catch (error) {
       return console.error({
@@ -16,7 +16,7 @@ class User {
 
   async findById(id) {
     try {
-      const result = await knex("tbl_users").select(["id", "firstName", "lastName", "username", "email"]).where({ id: id });
+      const result = await knex("tbl_users").select(["id", "firstName", "lastName", "username", "email", "role"]).where({ id: id });
 
       if (result.length > 0) {
         return result;
@@ -73,7 +73,7 @@ class User {
     }
   }
 
-  async updateUser(id, firstName, lastName, username, email) {
+  async updateUser(id, firstName, lastName, role) {
     try {
       let userObject = {}
 
@@ -93,37 +93,44 @@ class User {
         });
       }
 
-      const resultUsername = await this.checkUsername(username);
+      // const resultUsername = await this.checkUsername(username);
       // console.log(resultUsername);
 
-      if (!resultUsername) {
-        if (username != "" && isNaN(username)) {
-          userObject.username = username;
-        } else {
-          return console.log({
-            "error": "Username cannot be empty or a number"
-          });
-        }
-      } else {
-        return console.log({
-          "error": "Username already in use"
-        });
-      }
+      // if (!resultUsername) {
+      //   if (username != "" && isNaN(username)) {
+      //     userObject.username = username;
+      //   } else {
+      //     return console.log({
+      //       "error": "Username cannot be empty or a number"
+      //     });
+      //   }
+      // } else {
+      //   return console.log({
+      //     "error": "Username already in use"
+      //   });
+      // }
 
-      const resultEmail = await this.checkEmail(email);
+      // const resultEmail = await this.checkEmail(email);
 
-      if (!resultEmail) {
-        if (email != "" && isNaN(email)) {
-          userObject.email = email;
-        } else {
-          return console.log({
-            "error": "Email cannot be empty or a number"
-          });
-        }
+      // if (!resultEmail) {
+      //   if (email != "" && isNaN(email)) {
+      //     userObject.email = email;
+      //   } else {
+      //     return console.log({
+      //       "error": "Email cannot be empty or a number"
+      //     });
+      //   }
+      // } else {
+      //   return console.log({
+      //     "error": "Email already in use"
+      //   });
+      // }
+
+      if (role < 0 || role > 1) {
+        return console.log({ error: "Role cannot be lowest 0 or greatest 1" });
       } else {
-        return console.log({
-          "error": "Email already in use"
-        });
+        // console.log(role);
+        userObject.role = role;
       }
 
       const result = await knex.update(userObject).table("tbl_users").where({ id: id });

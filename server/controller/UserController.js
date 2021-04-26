@@ -120,10 +120,10 @@ class UserController {
   async updateUser(req, res) {
     try {
       const { id } = req.params;
-      const { firstName, lastName, username, email } = req.body;
+      const { firstName, lastName, role } = req.body;
 
-      const checkUsername = await User.checkUsername(username);
-      const checkEmail = await User.checkEmail(email);
+      // const checkUsername = await User.checkUsername(username);
+      // const checkEmail = await User.checkEmail(email);
 
       if (firstName == undefined && firstName == " " && isNaN(firstName)) {
         return res.status(400).json({ status: false, error: "First name cannot be empty or a number" });
@@ -133,23 +133,27 @@ class UserController {
         return res.status(400).json({ status: false, error: "Last name cannot be a number" });
       }
 
-      if (username == undefined) {
-        return res.status(400).json({ status: false, error: "Invalid input for username" });
+      // if (username == undefined) {
+      //   return res.status(400).json({ status: false, error: "Invalid input for username" });
+      // }
+
+      // if (checkUsername) {
+      //   return res.status(400).json({ status: false, error: "Username already been used" });
+      // }
+
+      // if (email == undefined) {
+      //   return res.status(400).json({ status: false, error: "Invalid input for email" });
+      // }
+
+      // if (checkEmail) {
+      //   return res.status(400).json({ status: false, error: "Email already been used" });
+      // }
+
+      if (role == undefined || role < 0 || role > 1) {
+        return res.status(400).json({ status: false, error: "Invalid role" });
       }
 
-      if (checkUsername) {
-        return res.status(400).json({ status: false, error: "Username already been used" });
-      }
-
-      if (email == undefined) {
-        return res.status(400).json({ status: false, error: "Invalid input for email" });
-      }
-
-      if (checkEmail) {
-        return res.status(400).json({ status: false, error: "Email already been used" });
-      }
-
-      await User.updateUser(id, firstName, lastName, username, email);
+      await User.updateUser(id, firstName, lastName, role);
 
       console.log({ status: true, "success": "User has been updated" });
       return res.status(200).json({ status: true, success: "User has been updated" });

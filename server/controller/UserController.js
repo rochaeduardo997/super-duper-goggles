@@ -122,6 +122,10 @@ class UserController {
       const { id } = req.params;
       const { firstName, lastName, role } = req.body;
 
+      const testLastName = lastName >= 0 ? 0 : "String";
+
+      // console.log(typeof (testLastName));
+
       // const checkUsername = await User.checkUsername(username);
       // const checkEmail = await User.checkEmail(email);
 
@@ -129,7 +133,7 @@ class UserController {
         return res.status(400).json({ status: false, error: "First name cannot be empty or a number" });
       }
 
-      if (!isNaN(lastName)) {
+      if (!isNaN(testLastName)) {
         return res.status(400).json({ status: false, error: "Last name cannot be a number" });
       }
 

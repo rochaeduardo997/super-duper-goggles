@@ -125,6 +125,10 @@ export default {
         this.usersToEdit.lastName,
         this.usersToEdit.role
       );
+
+      if (this.usersToEdit.lastName == "" || this.usersToEdit.lastName == " ") {
+        this.usersToEdit.lastName = undefined;
+      }
       const bearerToken = localStorage.getItem("token");
       axios({
         headers: {

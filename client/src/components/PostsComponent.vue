@@ -16,7 +16,7 @@
             <p>
               <button
                 v-on:click="
-                  activeReadModal(post.title);
+                  activeReadModal(post.title, post.id);
                   this.isPostReadModal = !this.isPostReadModal;
                 "
                 class="button is-success is-rounded"
@@ -30,7 +30,7 @@
       <hr />
     </div>
 
-    <!-- Read modal -->
+    <!-- read modal -->
     <div v-show="isPostReadModal != false" class="modal is-active">
       <div class="modal-background"></div>
       <div class="modal-card">
@@ -43,7 +43,7 @@
           ></button>
         </header>
         <section class="modal-card-body">
-          <!-- Content ... -->
+          <PostReadModal :postId="readPostId" />
         </section>
       </div>
     </div>
@@ -51,16 +51,13 @@
 </template>
 
 <script>
+import PostReadModal from "../components/PostsReadModal";
+
 import axios from "axios";
 
 export default {
-  data() {
-    return {
-      allPosts: [],
-
-      readPostTitle: "",
-      isPostReadModal: false,
-    };
+  components: {
+    PostReadModal,
   },
 
   created() {
@@ -76,10 +73,22 @@ export default {
       });
   },
 
+  data() {
+    return {
+      allPosts: [],
+
+      readPostTitle: "",
+      isPostReadModal: false,
+
+      readPostId: undefined,
+    };
+  },
+
   methods: {
-    activeReadModal(readPostTitle) {
-      console.log(readPostTitle);
+    activeReadModal(readPostTitle, readPostId) {
+      // console.log(readPostTitle, readPostId);
       this.readPostTitle = readPostTitle;
+      this.readPostId = readPostId;
     },
   },
 };

@@ -178,7 +178,7 @@ class UserController {
         // console.log(passwordMatch);
 
         if (passwordMatch) {
-          const token = jwt.sign({ email: userFoundByEmail.email, role: userFoundByEmail.role }, secret);
+          const token = jwt.sign({ id: userFoundByEmail.id, email: userFoundByEmail.email, role: userFoundByEmail.role }, secret);
           return res.status(200).json({ status: true, success: passwordMatch, token: token });
         } else {
           return res.status(401).json({ status: false, error: "Email/Password don\'t match" });
@@ -192,7 +192,8 @@ class UserController {
   }
 
   async validateToken(req, res) {
-    return res.status(200).send('ok');
+    console.log(req.id);
+    return res.status(200).json({ id });
   }
 }
 

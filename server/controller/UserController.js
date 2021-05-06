@@ -195,6 +195,11 @@ class UserController {
     console.log(req.id);
     return res.status(200).json({ id });
   }
+
+  async validateUserToken(req, res) {
+    console.log(req.id);
+    return res.status(200).json({ id });
+  }
 }
 
 module.exports = new UserController();

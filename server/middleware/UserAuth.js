@@ -10,8 +10,9 @@ module.exports = (req, res, next) => {
 
     const decoded = jwt.verify(token, secret);
 
-    if (decoded.role > 0) {
+    if (decoded.role >= 0) {
       email = decoded.email;
+      id = decoded.id;
 
       req.email = email;
       req.id = id;

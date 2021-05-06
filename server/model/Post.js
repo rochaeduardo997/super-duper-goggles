@@ -5,7 +5,7 @@ class Post {
     try {
       const result = await knex("tbl_posts")
         .select(["tbl_posts.id", "tbl_posts.title", "tbl_posts.slug", "tbl_posts.body", "tbl_posts.createdAt", "tbl_posts.updatedAt",
-          "tbl_users.firstName", "tbl_users.lastName", "tbl_users.username"])
+          "tbl_users.firstName", "tbl_users.lastName", "tbl_users.username"]).orderBy('tbl_posts.createdAt', 'desc')
         .join("tbl_users", "tbl_posts.user_id", "=", "tbl_users.id");
 
       return result;

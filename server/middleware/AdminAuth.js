@@ -11,6 +11,10 @@ module.exports = (req, res, next) => {
     const decoded = jwt.verify(token, secret);
 
     if (decoded.role == 1) {
+      id = decoded.id;
+
+      req.id = id;
+
       return next();
     } else {
       return res.status(400).json({

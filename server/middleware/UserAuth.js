@@ -14,6 +14,7 @@ module.exports = (req, res, next) => {
       email = decoded.email;
 
       req.email = email;
+      req.id = id;
 
       return next();
     } else {

@@ -109,7 +109,7 @@ export default {
         headers: {
           Authorization: `Bearer ${bearerToken}`,
         },
-        url: "http://localhost:5001/validate",
+        url: "http://localhost:5001/validateUser",
         method: "post",
       })
         .then((res) => {

@@ -1,10 +1,10 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
+import axios from 'axios'
+
 import Home from '../views/Home.vue'
 import Register from '../views/Register.vue'
 import Login from '../views/Login.vue'
 import Users from '../views/Users.vue'
-
-import axios from 'axios'
 
 function adminAuth(to, from, next) {
   const bearerToken = localStorage.getItem('token');
@@ -18,8 +18,7 @@ function adminAuth(to, from, next) {
       method: "post",
     }).then(() => {
       next();
-    }).catch((err) => {
-      console.log(err);
+    }).catch(() => {
       next('/login');
     });
   } else {

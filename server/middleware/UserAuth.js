@@ -13,9 +13,11 @@ module.exports = (req, res, next) => {
     if (decoded.role >= 0) {
       email = decoded.email;
       id = decoded.id;
+      role = decoded.role;
 
       req.email = email;
       req.id = id;
+      req.role = role;
 
       return next();
     } else {

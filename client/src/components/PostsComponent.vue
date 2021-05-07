@@ -33,6 +33,19 @@
                 Leia
               </button>
             </p>
+            <div v-show="userRole === 1">
+              <hr />
+              <button
+                class="button is-danger is-rounded"
+                v-on:click="
+                  activeDeleteModal(post.id);
+                  isPostDeleteModal = !isPostDeleteModal;
+                "
+              >
+                Deletar
+              </button>
+              <button class="button is-warning is-rounded">Editar</button>
+            </div>
           </div>
         </article>
       </div>
@@ -78,12 +91,34 @@
         </section>
       </div>
     </div>
+
+    <!-- delete post modal -->
+    <div v-show="isPostDeleteModal != false" class="modal is-active">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Deletando post</p>
+          <button
+            class="delete"
+            aria-label="close"
+            v-on:click="this.isPostDeleteModal = !this.isPostDeleteModal"
+          ></button>
+        </header>
+        <section class="modal-card-body">
+          <PostDeleteModal
+            v-on:eventToClose="isPostDeleteModal = !isPostDeleteModal"
+            :postId="deletePostId"
+          />
+        </section>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import PostReadModal from "../components/PostsReadModal";
 import PostCreateModal from "../components/PostCreateModal";
+import PostDeleteModal from "../components/PostDeleteModal";
 
 import axios from "axios";
 
@@ -91,10 +126,14 @@ export default {
   components: {
     PostReadModal,
     PostCreateModal,
+    PostDeleteModal,
   },
 
   watch: {
     isPostCreateModal() {
+      this.findPosts();
+    },
+    isPostDeleteModal() {
       this.findPosts();
     },
   },
@@ -116,6 +155,7 @@ export default {
           this.isAuthenticate = true;
 
           this.userId = res.data.id;
+          this.userRole = res.data.role;
         })
         .catch((err) => {
           console.log(err.response);
@@ -127,12 +167,16 @@ export default {
     return {
       allPosts: [],
       userId: undefined,
+      userRole: undefined,
 
       readPostTitle: "",
+
       isPostReadModal: false,
       isPostCreateModal: false,
+      isPostDeleteModal: false,
 
       readPostId: undefined,
+      deletePostId: undefined,
 
       isAuthenticate: false,
     };
@@ -155,6 +199,11 @@ export default {
       // console.log(readPostTitle, readPostId);
       this.readPostTitle = readPostTitle;
       this.readPostId = readPostId;
+    },
+
+    activeDeleteModal(id) {
+      this.deletePostId = id;
+      // console.log(this.deletePostId);
     },
   },
 };

@@ -4,7 +4,7 @@ const knex = require("../database/connection");
 
 const { findPostByTitle } = require("../model/Post")
 
-const bearerToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNhcmxvc0BlbWFpbC5jb20iLCJyb2xlIjoxLCJpYXQiOjE2MTg2NjYxNTh9.TzrgJWj71LF_8AoStF25VYg2nHYuOJJsHTFKBI07pPg"
+const bearerToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjAxLCJlbWFpbCI6ImNhZHVtYXZlcmlja0BlbWFpbC5jb20iLCJyb2xlIjoxLCJpYXQiOjE2MjA0Mjc1Nzd9.XpzU9eeA-Z_GcmtSgtStkSYgMR855sOLrwRESEMWpjw"
 
 test("Should FIND ALL posts, return an array greater than zero and status true", async () => {
   const axiosResult = await axios({
@@ -19,24 +19,7 @@ test("Should FIND ALL posts, return an array greater than zero and status true",
   const axiosResultStatus = axiosResult.data.status;
   // console.log(axiosResultStatus);
 
-  expect(axiosResultArray.length).toBeGreaterThan(0);
-  expect(axiosResultStatus).toEqual(true);
-});
-
-test("Should FIND ONE post, return an object and status true", async () => {
-  const axiosResult = await axios({
-    url: "http://localhost:5001/post/5",
-    method: "get"
-  });
-  // console.log(axiosResult);
-
-  const axiosResultArray = axiosResult.data.postById;
-  // console.log(axiosResultArray);
-
-  const axiosResultStatus = axiosResult.data.status;
-  // console.log(axiosResultStatus);
-
-  expect(axiosResultArray.length).toEqual(1);
+  // expect(axiosResultArray.length).toBeGreaterThan(0);
   expect(axiosResultStatus).toEqual(true);
 });
 
@@ -51,7 +34,7 @@ test("Should CREATE a post and return status true", async () => {
       title: "Titulo Teste",
       slug: "Slug Teste",
       body: "Corpo teste",
-      user_id: 29
+      user_id: 224
     }
   });
   // console.log(axiosResult);
@@ -64,6 +47,26 @@ test("Should CREATE a post and return status true", async () => {
 
   expect(axiosResultStatus).toEqual(true);
   expect(axiosResultMessage).toEqual("Post has been created");
+});
+
+test("Should FIND ONE post, return an object and status true", async () => {
+  const idReturned = await findPostByTitle("Titulo Teste");
+  // console.log(idReturned);
+
+  const axiosResult = await axios({
+    url: `http://localhost:5001/post/${idReturned}`,
+    method: "get"
+  });
+  // console.log(axiosResult);
+
+  const axiosResultArray = axiosResult.data.postById;
+  // console.log(axiosResultArray);
+
+  const axiosResultStatus = axiosResult.data.status;
+  // console.log(axiosResultStatus);
+
+  expect(axiosResultArray.length).toEqual(1);
+  expect(axiosResultStatus).toEqual(true);
 });
 
 test("Should UPDATE a post and return status true", async () => {

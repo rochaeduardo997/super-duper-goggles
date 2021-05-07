@@ -4,7 +4,7 @@ const knex = require("../database/connection");
 
 const { returnIdFromUsername } = require("../model/User");
 
-const bearerToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNhcmxvc0BlbWFpbC5jb20iLCJyb2xlIjoxLCJpYXQiOjE2MTg2NjYxNTh9.TzrgJWj71LF_8AoStF25VYg2nHYuOJJsHTFKBI07pPg"
+const bearerToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjAxLCJlbWFpbCI6ImNhZHVtYXZlcmlja0BlbWFpbC5jb20iLCJyb2xlIjoxLCJpYXQiOjE2MjA0Mjc1Nzd9.XpzU9eeA-Z_GcmtSgtStkSYgMR855sOLrwRESEMWpjw";
 
 test("Should FIND ALL users, return an array of users greater than zero and status true", async () => {
   const axiosResult = await axios({
@@ -29,7 +29,7 @@ test("Should FIND ONE user, return only an user and array must be equals to one 
     headers: {
       Authorization: `Bearer ${bearerToken}`
     },
-    url: "http://localhost:5001/user/1",
+    url: "http://localhost:5001/user/201",
     method: "get"
   });
 
@@ -80,8 +80,7 @@ test("Should UPDATE an user and return status true", async () => {
     data: {
       firstName: "test test",
       lastName: "jest jest",
-      username: "testtestjest",
-      email: 'testtestjestjest@email.com'
+      role: 1,
     }
   });
 
@@ -93,7 +92,7 @@ test("Should UPDATE an user and return status true", async () => {
 });
 
 test("Should DELETE an user and return status true", async () => {
-  const username = "testtestjest";
+  const username = "jesttest";
 
   const idReturned = await returnIdFromUsername(username);
   // console.log(idReturned);
